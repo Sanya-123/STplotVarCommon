@@ -5,7 +5,6 @@ static_assert(CHAR_BIT * sizeof (float) == 32, "Error float size");
 
 using namespace std::chrono;
 
-#ifndef Q_OS_WINDOWS
 VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
     m_lineWidth(1), tmpDesc(0), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
 {
@@ -21,7 +20,6 @@ VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
 
     setDotStyle(dotStyle);
 }
-#endif
 
 VarChannel::VarChannel(varloc_location_t location, QString name, QColor lineColor, int dotStyle) :
     m_lineWidth(1), tmpDesc(0), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
@@ -230,7 +228,6 @@ QString VarChannel::getFullNmaeNode(varloc_node_t *node)
 
 
     QString name = QString(node->name);
-#ifndef Q_OS_WINDOWS
     varloc_node_t * parent = var_node_get_parent(node);
     while (parent != NULL){
         if (parent->var_type != ARRAY){
@@ -239,7 +236,6 @@ QString VarChannel::getFullNmaeNode(varloc_node_t *node)
         }
         parent = var_node_get_parent(parent);
     }
-#endif
 
     return name;
 }

@@ -13,29 +13,9 @@
 #include <chrono>
 #include "varchannel.h"
 #include "settingsabstract.h"
+#include "stplotpluginloader.h"
 
 #define PLOT_INTERFACE_HEADER_VERSION           0x00000000
-
-union __attribute__((packed)) VersionUnion {
-    uint32_t version32;
-    struct __attribute__((packed)){
-        uint16_t build;
-        uint8_t minor;
-        uint8_t major;
-    }versionS;
-};
-
-static QString versionUnionToString(VersionUnion version)
-{
-    return QString::asprintf("%d.%d.%d", version.versionS.major, version.versionS.minor, version.versionS.build);
-}
-
-static QString versionUnionToString(uint32_t version)
-{
-    VersionUnion _version;
-    _version.version32 = version;
-    return QString::asprintf("%d.%d.%d", _version.versionS.major, _version.versionS.minor, _version.versionS.build);
-}
 
 /**
  * @brief The PlotWidgetAbstract class - abstrac widget clas for plot data

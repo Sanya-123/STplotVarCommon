@@ -4,6 +4,7 @@
 #include <QObject>
 #include "varchannel.h"
 #include <QPair>
+#include "stplotpluginloader.h"
 
 #define READ_WRITE_DEVICE_INTERFACE_HEADER_VERSION              0x00000000
 
@@ -144,6 +145,12 @@ public:
      * @return - plugin name
      */
     virtual QString getName() { return QString(""); }
+
+    /**
+     * @brief getInfo - get plugin info
+     * @return - plugin info
+     */
+    virtual QString getInfo() { return getName() + ":" + versionUnionToString(getVersion()); }
 };
 
 /**
@@ -169,6 +176,12 @@ public:
      * @return - plugin name
      */
     virtual QString getName() { return QString(""); }
+
+    /**
+     * @brief getInfo - get plugin info
+     * @return - plugin info
+     */
+    virtual QString getInfo() { return getName() + ":" + versionUnionToString(getVersion()); }
 };
 
 // registrate plugin
