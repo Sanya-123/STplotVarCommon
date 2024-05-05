@@ -61,6 +61,12 @@ public:
      * @return - plugin info
      */
     virtual QString getInfo() { return getName() + ":" + versionUnionToString(getVersion()); }
+
+    /**
+     * @brief getPriority - return prioryty plugin
+     * @return - 0 low priority 1,2,... highest priority
+     */
+    virtual unsigned int getPriority() {return 0;}
 };
 
 
