@@ -53,6 +53,14 @@ QList<T*> loadPlugin(uint32_t minHeaderVersion, uint32_t maxHeaderVersion)
     const QStringList entries = pluginsDir.entryList(QDir::Files);//get list plugins files
 
     for (const QString &fileName : entries) {
+        //skip file none library
+#if defined(Q_OS_WIN)
+        if(QFileInfo(fileName).suffix() != "dll")
+            continue;
+#else
+        if(QFileInfo(fileName).suffix() != "so")
+            continue;
+#endif
         qDebug() << "Try load plugin:" << fileName;
         QPluginLoader pluginLoader(pluginsDir.absoluteFilePath(fileName));//load file as plugin
         QObject *plugin = pluginLoader.instance();//get object plugin
