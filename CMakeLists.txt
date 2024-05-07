@@ -24,3 +24,7 @@ target_link_libraries(VarChannel PRIVATE Qt5::Widgets)
 set_target_properties(VarChannel PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
+
+if (WIN32)
+    install(TARGETS VarChannel DESTINATION ${CMAKE_BINARY_DIR}/lib)
+endif()
