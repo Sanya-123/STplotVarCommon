@@ -54,7 +54,7 @@ public:
      * @param location - addres located varibles
      * @return - 0 if OK else return error code
      */
-    virtual int writeDataDevice(uint32_t data, varloc_location_t location) {return -1;}
+    virtual int writeDataDevice(uint64_t data, varloc_location_t location) {return -1;}
 
     /**
      * @brief getReadDevConfigWidget - get configure widget

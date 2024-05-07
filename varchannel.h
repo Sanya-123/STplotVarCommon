@@ -39,8 +39,8 @@ public:
     QString getName();
     float getValue();
     varloc_location_t getLocation();
-    static float decode_value(uint32_t value, varloc_location_t location);
-    static uint32_t code_value(float value, varloc_location_t location);
+    static float decode_value(uint64_t value, varloc_location_t location);
+    static uint64_t code_value(float value, varloc_location_t location);
     bool hasLocation(varloc_location_t loc);
 
     static QString getFullNmaeNode(varloc_node_t* node);
@@ -76,8 +76,8 @@ public:
 
 public slots:
     void pushValue(float value, QTime record_time);
-    void pushValueRaw(uint32_t value);
-    void pushValueRawWithTime(uint32_t value, QDateTime date_time);
+    void pushValueRaw(uint64_t value);
+    void pushValueRawWithTime(uint64_t value, QDateTime date_time);
     void selectCurentPlot();
     void writeValues(float value);
 
@@ -116,7 +116,7 @@ signals:
     void updatePlot();
     void selectPlot();
 
-    void requestWriteData(uint32_t data, varloc_location_t location);
+    void requestWriteData(uint64_t data, varloc_location_t location);
 };
 
 #endif // VARCHANNEL_H

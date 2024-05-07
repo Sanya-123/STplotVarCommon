@@ -168,9 +168,9 @@ varloc_location_t var_node_get_load_location(varloc_node_t* node){
             loc.type = VARLOC_SIGNED;
         }
 
-        loc.mask = (1 << loc.address.size_bits) - 1;
-        if(loc.address.size_bits == 32)
-            loc.mask = 0xFFFFFFFF;
+        loc.mask = (((uint64_t)1) << loc.address.size_bits) - 1;
+        if(loc.address.size_bits == 64)
+            loc.mask = 0xFFFFFFFFFFFFFFFF;
 
         loc.mask = loc.mask << loc.address.offset_bits;
     }

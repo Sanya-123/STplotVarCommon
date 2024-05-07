@@ -73,7 +73,7 @@ void VarChannel::pushValue(float value, QTime record_time){
         emit updatePlot();
     // }
 }
-float VarChannel::decode_value(uint32_t value, varloc_location_t location)
+float VarChannel::decode_value(uint64_t value, varloc_location_t location)
 {
     float ret = 0;
     union {
@@ -84,8 +84,9 @@ float VarChannel::decode_value(uint32_t value, varloc_location_t location)
         int16_t     _i16;
         uint32_t    _u32;
         int32_t     _i32;
+        uint64_t    _u64;
     }combiner;
-    combiner._u32 = (value & location.mask) >> location.address.offset_bits;
+    combiner._u64 = (value & location.mask) >> location.address.offset_bits;
     if(location.address.size_bits <= 8){
         if (location.type == VARLOC_SIGNED){
             ret = combiner._i8;
@@ -113,9 +114,9 @@ float VarChannel::decode_value(uint32_t value, varloc_location_t location)
     return ret;
 }
 
-uint32_t VarChannel::code_value(float value, varloc_location_t location)
+uint64_t VarChannel::code_value(float value, varloc_location_t location)
 {
-    uint32_t ret = 0;
+    uint64_t ret = 0;
 
     if (location.type == VARLOC_FLOAT)
     {
@@ -140,11 +141,11 @@ uint32_t VarChannel::code_value(float value, varloc_location_t location)
     return ret;
 }
 
-void VarChannel::pushValueRawWithTime(uint32_t value, QDateTime date_time){
+void VarChannel::pushValueRawWithTime(uint64_t value, QDateTime date_time){
     pushValue(decode_value(value, m_location), date_time.time());
 }
 
-void VarChannel::pushValueRaw(uint32_t value){
+void VarChannel::pushValueRaw(uint64_t value){
 
     QTime time = QTime::currentTime();
     pushValue(decode_value(value, m_location), time);
