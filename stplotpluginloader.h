@@ -99,7 +99,7 @@ QList<T*> loadPlugin(uint32_t minHeaderVersion, uint32_t maxHeaderVersion)
             }
         }
         else{
-            qDebug() << "Failed loading plugin";
+            qDebug() << "Failed loading plugin" << pluginLoader.errorString();
         }
     }
 
