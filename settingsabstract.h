@@ -40,9 +40,7 @@ public slots:
             if(mapSettings[name].type() == val.type())
             {
                 mapSettings[name] = val;
-#ifndef WIN32
                 emit settingsUpdated();
-#endif
             }
         }
     }
