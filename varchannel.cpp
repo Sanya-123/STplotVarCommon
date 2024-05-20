@@ -6,7 +6,7 @@ static_assert(CHAR_BIT * sizeof (float) == 32, "Error float size");
 using namespace std::chrono;
 
 VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), tmpDesc(0), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
 {
     if (node == NULL){
         return;
@@ -22,7 +22,7 @@ VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
 }
 
 VarChannel::VarChannel(varloc_location_t location, QString name, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), tmpDesc(0), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
 {
     setLocation(location);
     m_name = name;
@@ -35,7 +35,7 @@ VarChannel::VarChannel(varloc_location_t location, QString name, QColor lineColo
 }
 
 VarChannel::VarChannel(QString script, QString name, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), tmpDesc(0), m_lineColor(lineColor), m_isMathChanale(true), m_script(script), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(true), m_script(script), m_value(0)
 {
     varloc_location_t loc;
     loc.address.base = 0x00000000;
@@ -66,12 +66,7 @@ void VarChannel::pushValue(float value, QTime record_time){
     };
 //    m_buffer.push_back(var);
     m_buffer.append(var);
-    tmpDesc++;
-    // if(tmpDesc == 10)
-    // {
-    //     tmpDesc = 0;
-        emit updatePlot();
-    // }
+    emit updatePlot();
 }
 float VarChannel::decode_value(uint64_t value, varloc_location_t location)
 {

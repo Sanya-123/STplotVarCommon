@@ -104,8 +104,6 @@ private:
     bool                    m_isMathChanale;
     QString                 m_script;
 
-    int tmpDesc;
-
 
 signals:
     void changePlotColor();
