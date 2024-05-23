@@ -19,12 +19,11 @@
 #define MAX_DEFAOULT_DOT_STYLE              1
 #define MAX_DEFAOULT_LINE_STYLE             1
 
-#define REPLEASE_DOT_VAR_NAME(name)         name = name.replace(".", "_") /*TODO make better replease*/
-
-typedef double VarElement;//TODO move evrywere from intor VarElement
+#define REPLEASE_DOT_VAR_NAME(name)         name = name.replace(".", "_").replace("[", "___").replace("]", "___") /*TODO make better replease*/
 
 typedef struct {
     double value;
+    double rawValue;//value without mult and offset
     QTime qtime;
 }VarValue;
 
@@ -74,14 +73,23 @@ public:
     QString script() const;
     void setScript(const QString &newScript);
 
+    double getOffset() const;
+    void setOffset(double newOffset);
+
+    double getMult() const;
+    void setMult(double newMult);
+
 public slots:
     void pushValue(float value, QTime record_time);
     void pushValueRaw(uint64_t value);
     void pushValueRawWithTime(uint64_t value, QDateTime date_time);
     void selectCurentPlot();
     void writeValues(float value);
+    void requestClearGraph();
+    void reloadValues();
 
 private:
+    float                   m_rawValue;
     float                   m_value;
     QString                 m_name;
     QString                 m_displayName;
@@ -104,6 +112,10 @@ private:
     bool                    m_isMathChanale;
     QString                 m_script;
 
+    //offset and mult
+    //value = (rawValue + offset)*mult
+    double m_offset, m_mult;
+
 
 signals:
     void changePlotColor();
@@ -113,6 +125,7 @@ signals:
     void changeDisplayName();
     void updatePlot();
     void selectPlot();
+    void clearGraph();
 
     void requestWriteData(uint64_t data, varloc_location_t location);
 };

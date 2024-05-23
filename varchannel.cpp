@@ -6,7 +6,8 @@ static_assert(CHAR_BIT * sizeof (float) == 32, "Error float size");
 using namespace std::chrono;
 
 VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0),
+    m_mult(1.0), m_offset(0)
 {
     if (node == NULL){
         return;
@@ -22,7 +23,8 @@ VarChannel::VarChannel(varloc_node_t* node, QColor lineColor, int dotStyle) :
 }
 
 VarChannel::VarChannel(varloc_location_t location, QString name, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(false), m_value(0),
+    m_mult(1.0), m_offset(0)
 {
     setLocation(location);
     m_name = name;
@@ -35,7 +37,8 @@ VarChannel::VarChannel(varloc_location_t location, QString name, QColor lineColo
 }
 
 VarChannel::VarChannel(QString script, QString name, QColor lineColor, int dotStyle) :
-    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(true), m_script(script), m_value(0)
+    m_lineWidth(1), m_lineColor(lineColor), m_isMathChanale(true), m_script(script), m_value(0),
+    m_mult(0), m_offset(0)
 {
     varloc_location_t loc;
     loc.address.base = 0x00000000;
@@ -58,10 +61,14 @@ VarChannel::~VarChannel(){
 }
 
 void VarChannel::pushValue(float value, QTime record_time){
-    m_value = value;
+    m_rawValue = value;
+    if(m_isMathChanale)
+        m_value = value;
+    else
+        m_value = (m_rawValue + m_offset)*m_mult;
     VarValue var = {
-        .value = value,
-//        .time = time_point_cast<microseconds>(system_clock::now()),
+        .value = m_value,
+        .rawValue = m_rawValue,
         .qtime = record_time, //QTime::currentTime(),
     };
 //    m_buffer.push_back(var);
@@ -157,6 +164,43 @@ void VarChannel::writeValues(float value)
     {
         emit requestWriteData(code_value(value, m_location), m_location);
     }
+}
+
+void VarChannel::requestClearGraph()
+{
+    if(m_isMathChanale)
+    {
+        m_buffer.clear();
+    }
+    emit clearGraph();
+}
+
+void VarChannel::reloadValues()
+{
+    for(int i = 0; i < m_buffer.size(); i++)
+        m_buffer[i].value = (m_buffer[i].rawValue + m_offset)*m_mult;
+
+    emit updatePlot();
+}
+
+double VarChannel::getMult() const
+{
+    return m_mult;
+}
+
+void VarChannel::setMult(double newMult)
+{
+    m_mult = newMult;
+}
+
+double VarChannel::getOffset() const
+{
+    return m_offset;
+}
+
+void VarChannel::setOffset(double newOffset)
+{
+    m_offset = newOffset;
 }
 
 QString VarChannel::script() const
@@ -290,12 +334,11 @@ VarValue VarChannel::getValue(int numberElement)
         return m_buffer[numberElement];
 
 
-    return (VarValue){0, QTime::currentTime()};//NOTE could be paroblem in save files
+    return (VarValue){0.0, 0.0, QTime::currentTime()};//NOTE could be paroblem in save files
 }
 
 QVector<VarValue> VarChannel::getBuffer()
 {
-
     return m_buffer;
 }
 
