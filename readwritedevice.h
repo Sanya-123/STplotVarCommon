@@ -5,8 +5,10 @@
 #include "varchannel.h"
 #include <QPair>
 #include "stplotpluginloader.h"
+#include <QDialog>
+#include <QSettings>
 
-#define READ_WRITE_DEVICE_INTERFACE_HEADER_VERSION              0x00000000
+#define READ_WRITE_DEVICE_INTERFACE_HEADER_VERSION              0x00010000
 
 class ReadDeviceObject : public QObject
 {
@@ -57,10 +59,10 @@ public:
     virtual int writeDataDevice(uint64_t data, varloc_location_t location) {return -1;}
 
     /**
-     * @brief getReadDevConfigWidget - get configure widget
+     * @brief getReadDevConfigDialog - get configure widget
      * @return - configure widget for curent device
      */
-    virtual QWidget* getReadDevConfigWidget() = 0;
+    virtual QDialog* getReadDevConfigDialog() = 0;
 
     /**
      * @brief readFileDevice - function for read file device (directly read chanales)
@@ -68,6 +70,18 @@ public:
      * @return - -1 this fuction is note support; -2... error
      */
     virtual int readFileDevice(QVector<VarChannel *> chanales, QVector<QTime> *readTimes = nullptr) {return -1;}
+
+    /**
+     * @brief saveSettings - function save RW confir
+     * @param settings - point to setting
+     */
+    virtual void saveSettings(QSettings *settings) {}
+
+    /**
+     * @brief saveSettings - function restore RW confir
+     * @param settings - point to setting
+     */
+    virtual void restoreSettings(QSettings *settings) {}
 
 signals:
     void addressesReed(uint32_t addres, QVector<uint8_t> data);
@@ -108,10 +122,10 @@ public:
     virtual int execSaveDevice(QList<QString> chanaleNames, QVector<float> listDecoded, QDateTime time) = 0;
 
     /**
-     * @brief getSaveDevConfigWidget - get configure widget
+     * @brief getSaveDevConfigDialog - get configure widget
      * @return - configure widget for curent device
      */
-    virtual QWidget* getSaveDevConfigWidget() = 0;
+    virtual QDialog* getSaveDevConfigDialog() = 0;
 
     //some overwrite from read device
     bool isFileDevice() {return true;}
