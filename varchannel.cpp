@@ -175,6 +175,12 @@ void VarChannel::requestClearGraph()
     emit clearGraph();
 }
 
+void VarChannel::requestClearBufer()
+{
+    m_buffer.clear();
+    emit clearGraph();
+}
+
 void VarChannel::reloadValues()
 {
     for(int i = 0; i < m_buffer.size(); i++)
