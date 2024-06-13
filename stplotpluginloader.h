@@ -70,7 +70,7 @@ QList<T*> loadPlugin(uint32_t minHeaderVersion, uint32_t maxHeaderVersion)
             {
                 VersionUnion _version;
                 _version.version32 = _interface->getVersion();
-                qDebug() << "OK plugin:" << _interface->getName() <<
+                qInfo() << "OK plugin:" << _interface->getName() <<
                             QString::asprintf("v%d.%d.%d", _version.versionS.major, _version.versionS.minor, _version.versionS.build) << _interface->getInfo();
 
                 _version.versionS.build = 0;//do note abalize build version just major and minor

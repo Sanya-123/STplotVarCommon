@@ -8,7 +8,28 @@
 #include <QDialog>
 #include <QSettings>
 
-#define READ_WRITE_DEVICE_INTERFACE_HEADER_VERSION              0x00010000
+#define READ_WRITE_DEVICE_INTERFACE_HEADER_VERSION              0x00020000
+
+#define MAX_PROCENT_FILE_DIALOG                                 100.0
+
+class AbstractFileProgress : public QObject
+{
+    Q_OBJECT
+public:
+    AbstractFileProgress(QObject *parent = nullptr) : QObject{parent} {}
+    //by defaoult is is initid becouse in some of
+    //case I would like to use this class as empty progress
+    virtual bool isCanceled() {return canceFlag;}
+
+public slots:
+    virtual void startProgress() {canceFlag = false;}
+    virtual void stopProgress() {canceFlag = true;}
+    virtual void setProgress(float procent) {}
+    virtual void setMessadge(QString msg) {}
+
+protected:
+    bool canceFlag;
+};
 
 class ReadDeviceObject : public QObject
 {
@@ -67,9 +88,11 @@ public:
     /**
      * @brief readFileDevice - function for read file device (directly read chanales)
      * @param chanales - list of chanales
+     * @param fileProgress - point to progress bar object
+     * @param readTimes - point to vector of times for math chanale
      * @return - -1 this fuction is note support; -2... error
      */
-    virtual int readFileDevice(QVector<VarChannel *> chanales, QVector<QTime> *readTimes = nullptr) {return -1;}
+    virtual int readFileDevice(QVector<VarChannel *> chanales, AbstractFileProgress *fileProgress, QVector<QTime> *readTimes = nullptr) {return -1;}
 
     /**
      * @brief saveSettings - function save RW confir
