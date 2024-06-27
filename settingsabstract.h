@@ -35,27 +35,43 @@ public slots:
      */
     virtual void setValues(QString name, QVariant val)
     {
+        if(updateValue(name, val))
+        {
+            emit settingsUpdated();
+            emit settingsUpdated(name, val);
+        }
+    }
+
+    /**
+     * @brief updateValue - set values with out emit update settings
+     * @param name - name setting
+     * @param val - value setting
+     * @return - true is map contain name uand type is corrent
+     */
+    virtual bool updateValue(QString name, QVariant val)
+    {
         if(mapSettings.contains(name))
         {
             if(mapSettings[name].type() == val.type())
             {
                 mapSettings[name] = val;
-                emit settingsUpdated();
+                return true;
             }
         }
+        return false;
     }
 
     virtual void restoreDefoultSetings() {mapSettings = mapSettingsDefauold; emit settingsUpdated();}
 
 signals:
     void settingsUpdated();
+    void settingsUpdated(QString name, QVariant val);
 
 protected:
     //map settings mname and values
     QMap<QString, QVariant> mapSettingsDefauold;
     //    friend class PlotWidgetAbstract;
     //    friend class PlotWidgetInterfacePlugin;
-private:
     QMap<QString, QVariant> mapSettings;
 };
 

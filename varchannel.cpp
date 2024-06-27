@@ -294,6 +294,10 @@ float VarChannel::getValue(){
     return m_value;
 }
 
+float VarChannel::getRawValue(){
+    return m_rawValue;
+}
+
 QVector<bool> VarChannel::getPlotList()
 {
     return m_plotListl;

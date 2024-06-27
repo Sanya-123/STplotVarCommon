@@ -37,6 +37,7 @@ public:
     ~VarChannel();
     QString getName();
     float getValue();
+    float getRawValue();
     varloc_location_t getLocation();
     static float decode_value(uint64_t value, varloc_location_t location);
     static uint64_t code_value(float value, varloc_location_t location);
