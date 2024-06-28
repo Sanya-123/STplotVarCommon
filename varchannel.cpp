@@ -164,6 +164,10 @@ void VarChannel::writeValues(float value)
     {
         emit requestWriteData(code_value(value, m_location), m_location);
     }
+    else
+    {
+        pushValue(value, QTime::currentTime());
+    }
 }
 
 void VarChannel::requestClearGraph()
