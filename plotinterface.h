@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QSettings>
 #include <QMap>
+#include <QHash>
 #include <QtPlugin>
 #include <chrono>
 #include "varchannel.h"
@@ -48,32 +49,18 @@ public:
      */
     virtual SettingsAbstract* gedSettings() = 0;
 
-//    /**
-//     * @brief getSettings - get curent plot settings
-//     * @return
-//     */
-//    virtual SettingsAbstract* getSettings() = 0;
-
-//    /**
-//     * @brief plotVar - update plot(update graph)
-//     * @param plotName - plot name
-//     * @param values - vector of values
-//     * @return - trye if plot is created
-//     */
-//    virtual bool plotVar(QString plotName, QVector<VarValue> values) = 0;
-
-//    virtual void plotVars(QMap<QString, QVector<VarValue>> plotsMap)
-//    {
-//        for(QMap<QString, QVector<VarValue>>::const_iterator i = plotsMap.constBegin();
-//            i != plotsMap.constEnd(); i++)
-//        {
-//            plotVar(i.key(), i.value());
-//        }
-//    }
-
-//    virtual void setName(QString name) = 0;
-//    virtual QString getName() = 0;
-
+public slots:
+    /**
+     * @brief setViewProps - update view with new properties
+     * @param props - properties to update
+     */
+    virtual void setViewProps(QHash<QString, QVariant> props) {}
+signals:
+    /**
+     * @brief viewPropsUpdated - view properties updated
+     * @param props - changed properties
+     */
+    void viewPropsUpdated(QHash<QString, QVariant> props);
 };
 
 /**
